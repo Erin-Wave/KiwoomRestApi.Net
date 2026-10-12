@@ -313,11 +313,16 @@ Console.WriteLine($"금현물 잔고평가금액: {goldEvaluationBalances.Data.B
 
 ### API 제한사항
 
+> 키움증권 REST API 유량 정책 (2026.07.02 기준, 계좌(토큰)별). 정책은 변경될 수 있으니 [키움 REST API 공지사항](https://openapi.kiwoom.com/board/Board0101View)을 확인하세요.
+
 | 구분 | 제한 | 권장사항 |
 |:----:|:----:|----------|
-| **API 호출** | 초당 20 회 | Rate limiting 구현 |
-| **실시간 구독** | 동시 40 종목 | 필요한 종목만 구독 |
-| **WebSocket** | 연결당 1 개 | 연결 상태 모니터링 |
+| **국내주식 API 호출** | 주문 TR 초당 5 회, 조회 TR 초당 5 회 | Rate limiting 구현 |
+| **미국주식 API 호출** | 주문 10 회 / 조회 5 회 / 환전 1 회 (초당, 피크타임 09~10시는 3 / 3 / 1 회)<br>전체 초당 50 회, 차트 초당 20 회, 종목리스트(usa10099) 분당 5 회 | Rate limiting 구현 |
+| **모의투자** | TR 1개당 초당 1 회 | 테스트 시 호출 간격 조절 |
+| **실시간 구독** | 세션당 200 종목 | 필요한 종목만 구독 |
+| **실시간 조건검색** | 세션당 국내 10 건, 미국 10 건 (결과 최대 100 종목) | 사용하지 않는 조건검색 해제 |
+| **WebSocket** | 계좌(토큰)별 세션 1 개 | 연결 상태 모니터링 |
 | **토큰 유효기간** | 24 시간 | 자동 갱신 로직 구현 |
 
 ### 최적화 가이드
@@ -358,6 +363,67 @@ var results = await Task.WhenAll(tasks);
 
 <details>
 <summary><strong>Release Notes</strong></summary>
+
+### v0.10.0 (2026-10-12)
+- 키움 REST API 공지사항(2026.07~10) 및 API 가이드 변경분 반영 (KRX 애프터마켓 신설·NXT 제도 개편, 신규 TR, 조건검색 통합시세 등)
+
+> ⚠️ **호환성 변경**
+> - 아래 메서드는 `CancellationToken` 앞에 선택 파라미터가 추가되어, `CancellationToken`을 위치 인자로 넘기던 코드는 `cancellationToken:` 이름 지정 인자로 바꿔야 합니다.
+>   `GetOpenMarketInvestorTransactionTopsAsync`(ka10065), `GetConsignedTransactionsAsync`(kt00015), `GetConditionSearchRequestAsync`(ka10172), `GetConditionSearchRequestRealtimeAsync`(ka10173)
+> - `UsStock.Account.GetTransactionHistoryAsync`(ust21100), `GetPeriodProfitRatesAsync`(ust21650)는 명세상 필수값이 된 일자 파라미터가 필수로 바뀌었습니다.
+> - 삭제된 TR과 사용할 수 없게 된 값은 `[Obsolete]`로 표시했으며, 향후 버전에서 제거될 예정입니다.
+
+#### 국내주식
+- 추가: | ka00190 | 대량체결상위 (`GetLargeTradeTopsAsync`)
+- 추가: | ka00196 | 체결금액대별매매비중 (`GetTradeAmountRangeTransactionRatiosAsync`)
+- 추가: | ka04196 | 수익률상위고객매매상세 (`GetTopProfitCustomerTransactionDetailsAsync`)
+- 추가: | ka10103 | 종목메모 조회 (`GetStockMemosAsync`)
+- 추가: | ka11079 | 주식틱차트정규장조회요청 (`GetRegularMarketTickChartsAsync`, `GetRegularMarketTickChartsByRangeAsync`)
+- 추가: | ka11080 | 주식분봉차트정규장조회요청 (`GetRegularMarketMinuteChartsAsync`, `GetRegularMarketMinuteChartsByRangeAsync`)
+- 추가: | ka11081 | 주식일봉차트정규장조회요청 (`GetRegularMarketDailyChartsAsync`, `GetRegularMarketDailyChartsByRangeAsync`)
+- 추가: | ka11082 | 주식주봉차트정규장조회요청 (`GetRegularMarketWeeklyChartsAsync`, `GetRegularMarketWeeklyChartsByRangeAsync`)
+- 추가: | ka11083 | 주식월봉차트정규장조회요청 (`GetRegularMarketMonthlyChartsAsync`, `GetRegularMarketMonthlyChartsByRangeAsync`)
+- 추가: | ka11094 | 주식년봉차트정규장조회요청 (`GetRegularMarketYearlyChartsAsync`, `GetRegularMarketYearlyChartsByRangeAsync`)
+- 추가: | kt10000, kt10001, kt10006, kt10007 | NXT 프리마켓 GTP 주문유형 보통(GTP) 40, 최유리(GTP) 46, 최우선(GTP) 47 (`KiwoomOrderTransactionType`, `KiwoomCreditOrderTransactionType`)
+- 추가: | ka10172, ka10173 | 조건검색 통합시세 지원 거래소구분(`exchangeType`, `KiwoomWebSocketConditionSearchExchangeType`) 파라미터
+- 추가: | ka10065 | 장중투자자별매매상위요청 금액수량구분(`amountQuantityType`) 파라미터
+- 추가: | kt00015 | 위탁종합거래내역요청 조회정렬구분(`sortType`, `KiwoomAccountQuerySortType`) 파라미터
+- 추가: | ka10079~ka10083, ka10094 | 주식 차트 응답에 수정구분자(`UpdatedStockPriceType`), 수정비율(`UpdateRate`) 필드, 분봉 누적거래량(`AccumulatedVolume`) 필드
+- 추가: | ka10039 | 증권사별매매상위요청 응답에 순매수금액·매수금액·매도금액 필드
+- 추가: | ka10063 | 장중투자자별매매요청 응답에 순매수금액·매수금액·매도금액 및 증감 필드
+- 추가: | ka40006 | ETF시간대별추이요청 응답에 종목명·ETF대상지수명·원주가격·ETF/ETN과세유형 필드
+- 추가: | ka90002 | 테마구성종목요청 응답에 등락률·기간수익률 필드
+- 추가: | ka10101 | 업종코드 리스트 응답에 시장구분코드(`MarketCode`) 필드
+- 추가: | ka10173 | 조건검색 실시간 수신값에 거래소구분(9081) 필드
+- 추가: `KiwoomEtfManagementCompany` SOL(3048), HANARO(3257) / `KiwoomStockInfoInvestorType` 사모펀드(3100) / `KiwoomStockInfoMarketType3` 인프라투융자, 신주인수권증서, ETN, 손실제한 ETN, 금현물, 변동성 ETN / `KiwoomAccountMarketDealType` KRX금현물(5)
+- 변경: | ka10086 | 일별주가요청 표시구분(`KiwoomMarketConditionAmountQuantityType2`) 값을 명세대로 수정 (수량 0, 금액 1)
+- 변경: | ka30005 | ELW조건검색요청 권리구분을 명세대로 1자리(0~7)로 전송
+- 변경: | kt00008 | 계좌별익일결제예정내역요청 응답 목록 키를 `acnt_nxdy_setl_frcs_prps_array`로 수정 (목록이 비어 있던 문제)
+- 변경: | ka10172 | 조건검색 요청 일반 결과가 `OnConditionSearchRequestReceived` 이벤트로 전달되지 않던 문제 수정
+- 변경: 실시간 VI발동구분(9068)에 VI연장(4), 장운영구분(215)에 KRX 애프터마켓 시작·종료 등 설명 갱신
+- 변경: | ka90001, ka90005, ka90008 | 삭제 예정 파라미터(`themeName`, `date`) 안내 추가
+- 삭제(Obsolete): | ka10009 | 주식기관요청 (`GetStockInstitutionsAsync`) - 2026.06.18 TR 삭제, ka10045 사용
+- 삭제(Obsolete): | ka10087 | 시간외단일가요청 (`GetAfterMarketSinglePriceOrderBookAsync`, `GetAfterMarketSinglePriceOrderBookListAsync`) - KRX 시간외단일가 시장 폐지
+- 삭제(Obsolete): | ka10098 | 시간외단일가등락율순위요청 (`GetAfterMarketSinglePriceChangeRateRanksAsync`) - KRX 시간외단일가 시장 폐지
+- 삭제(Obsolete): 시간외단일가 주문유형(62) `KiwoomOrderTransactionType.AfterMarketSinglePrice`, `KiwoomCreditOrderTransactionType.AfterMarketSinglePrice`
+- 삭제(Obsolete): 실시간 주문체결(00) 시간외단일가 현재가(10010), 주식호가잔량(0D)·ETF NAV(0G)·종목프로그램매매(0w)의 명세 제거 항목
+- 삭제(Obsolete): `KiwoomStockInfoBeforeMarketType.Regular`, `AfterMarketSinglePrice` (ka10054), `KiwoomThemeQueryType.Theme` (ka90001)
+
+#### 미국주식
+- 추가: | usa10103 | 미국주식 종목메모 조회 (`GetStockMemosAsync`)
+- 추가: | ust21200 | 미국주식 예약 매수주문 (`ReserveBuyOrderAsync`)
+- 추가: | ust21201 | 미국주식 예약 매도주문 (`ReserveSellOrderAsync`)
+- 추가: | ust21203 | 미국주식 예약주문 취소 (`CancelReservedOrderAsync`)
+- 추가: | ust21204 | 미국주식 일자별 예약내역 조회 (`GetDailyReservedOrdersAsync`)
+- 추가: | ust21205 | 미국주식 예약주문 내역조회 (`GetReservedOrdersAsync`)
+- 추가: | usa23100 | 미국주식 업종별 등락률 상위/하위 응답에 매도호가·매수호가 필드
+- 추가: | usa20290 | 미국주식 조건검색 요청 실시간 응답에 거래소구분(`stexTp`, 9081) 필드
+- 변경: | ust21100 | 미국주식 거래내역 시작일자·종료일자 필수, 구분 기본값 전체(0), 원화대용입출금제외여부 기본값 비제외(N)
+- 변경: | ust21650 | 미국주식 기간별 수익률 현황 조회시작일자·조회종료일자 필수
+- 삭제(Obsolete): `KiwoomUsStockAccountTransactionType`의 명세 제거 구분값 (입출금, 입출고, 입금, 출금, 배당금입금, 환전 계열)
+
+#### 기타
+- 변경: README API 제한사항을 키움 유량 정책(2026.07.02 기준)으로 갱신
 
 ### v0.9.0 (2026-07-10)
 - 추가: 미국주식(UsStocks) API Wrapper 전체 추가 (`client.UsStock`)

@@ -23,11 +23,11 @@
 		/// <summary>
 		/// 수량
 		/// </summary>
-		Quantity = 1,
+		Quantity = 0,
 		/// <summary>
 		/// 금액(백만원)
 		/// </summary>
-		Amount1M = 2
+		Amount1M = 1
 	}
 
 	/// <summary>

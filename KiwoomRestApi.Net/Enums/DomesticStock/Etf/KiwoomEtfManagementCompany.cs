@@ -37,6 +37,14 @@ namespace KiwoomRestApi.Net.Enums.DomesticStock.Etf
 		/// </summary>
 		ArirangHanwha = 3022,
 		/// <summary>
+		/// SOL (신한자산운용)
+		/// </summary>
+		SolShinhan = 3048,
+		/// <summary>
+		/// HANARO (NH아문디)
+		/// </summary>
+		HanaroNhAmundi = 3257,
+		/// <summary>
 		/// 기타운용사
 		/// </summary>
 		Other = 9999

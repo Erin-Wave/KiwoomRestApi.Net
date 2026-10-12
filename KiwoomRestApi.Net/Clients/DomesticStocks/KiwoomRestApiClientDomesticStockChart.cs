@@ -15,7 +15,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 {
 	/// <summary>
 	/// 차트 API 클라이언트
-	/// 현재 21개
+	/// 현재 27개
 	/// </summary>
 	/// <param name="client"></param>
 	public class KiwoomRestApiClientDomesticStockChart(KiwoomRestApiClient client) : BaseClient
@@ -383,6 +383,340 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 			while (true)
 			{
 				var result = await GetYearlyChartsAsync(stockCode, endDate, isUpdateStockPrice, cancellationToken)
+					.ConfigureAwait(false);
+
+				if (result?.Data?.Items == null || !result.Data.Items.Any()) break;
+
+				results.AddRange(result.Data.Items.Where(x => x.Date >= startDate && x.Date <= endDate));
+
+				if (result.Data.Items.Last().Date < startDate) break;
+				if (string.IsNullOrEmpty(result.NextKey)) break;
+
+				_client.NextKey = result.NextKey;
+				_client.ContYn = true;
+
+				await Task.Delay(_client.PagingDelay, cancellationToken);
+			}
+
+			return results;
+		}
+
+		/// <summary>
+		/// | ka11079 | 주식틱차트정규장조회요청
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="tickCount"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomChartGetRegularMarketTickCharts>> GetRegularMarketTickChartsAsync(string stockCode, int tickCount, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka11079";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode)
+				.AddField("tic_scope", tickCount)
+				.AddField("upd_stkpc_tp", isUpdateStockPrice);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomChartGetRegularMarketTickCharts>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// 주식틱차트정규장조회요청(기간)
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="tickCount"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<List<KiwoomChartGetTickChartItem>> GetRegularMarketTickChartsByRangeAsync(string stockCode, int tickCount, DateTime startDate, DateTime endDate, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			var results = new List<KiwoomChartGetTickChartItem>();
+			_client.NextKey = string.Empty;
+			_client.ContYn = false;
+
+			while (true)
+			{
+				var result = await GetRegularMarketTickChartsAsync(stockCode, tickCount, isUpdateStockPrice, cancellationToken)
+					.ConfigureAwait(false);
+
+				if (result?.Data?.Items == null || !result.Data.Items.Any()) break;
+
+				results.AddRange(result.Data.Items.Where(x => x.TradeTime >= startDate && x.TradeTime <= endDate));
+
+				if (result.Data.Items.Last().TradeTime < startDate) break;
+				if (string.IsNullOrEmpty(result.NextKey)) break;
+
+				_client.NextKey = result.NextKey;
+				_client.ContYn = true;
+
+				await Task.Delay(_client.PagingDelay, cancellationToken);
+			}
+
+			return results;
+		}
+
+		/// <summary>
+		/// | ka11080 | 주식분봉차트정규장조회요청
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="tickCount"></param>
+		/// <param name="date"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomChartGetRegularMarketMinuteCharts>> GetRegularMarketMinuteChartsAsync(string stockCode, int tickCount, DateTime date, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka11080";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode)
+				.AddField("tic_scope", tickCount)
+				.AddField("upd_stkpc_tp", isUpdateStockPrice)
+				.AddField("base_dt", date);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomChartGetRegularMarketMinuteCharts>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// 주식분봉차트정규장조회요청(기간)
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="tickCount"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<List<KiwoomChartGetTickChartItem>> GetRegularMarketMinuteChartsByRangeAsync(string stockCode, int tickCount, DateTime startDate, DateTime endDate, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			var results = new List<KiwoomChartGetTickChartItem>();
+			_client.NextKey = string.Empty;
+			_client.ContYn = false;
+
+			while (true)
+			{
+				var result = await GetRegularMarketMinuteChartsAsync(stockCode, tickCount, endDate, isUpdateStockPrice, cancellationToken)
+					.ConfigureAwait(false);
+
+				if (result?.Data?.Items == null || !result.Data.Items.Any()) break;
+
+				results.AddRange(result.Data.Items.Where(x => x.TradeTime >= startDate && x.TradeTime <= endDate));
+
+				if (result.Data.Items.Last().TradeTime < startDate) break;
+				if (string.IsNullOrEmpty(result.NextKey)) break;
+
+				_client.NextKey = result.NextKey;
+				_client.ContYn = true;
+
+				await Task.Delay(_client.PagingDelay, cancellationToken);
+			}
+
+			return results;
+		}
+
+		/// <summary>
+		/// | ka11081 | 주식일봉차트정규장조회요청
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="date"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomChartGetRegularMarketDailyCharts>> GetRegularMarketDailyChartsAsync(string stockCode, DateTime date, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka11081";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode)
+				.AddField("base_dt", date)
+				.AddField("upd_stkpc_tp", isUpdateStockPrice);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomChartGetRegularMarketDailyCharts>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// 주식일봉차트정규장조회요청(기간)
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<List<KiwoomChartGetChartItem>> GetRegularMarketDailyChartsByRangeAsync(string stockCode, DateTime startDate, DateTime endDate, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			var results = new List<KiwoomChartGetChartItem>();
+			_client.NextKey = string.Empty;
+			_client.ContYn = false;
+
+			while (true)
+			{
+				var result = await GetRegularMarketDailyChartsAsync(stockCode, endDate, isUpdateStockPrice, cancellationToken)
+					.ConfigureAwait(false);
+
+				if (result?.Data?.Items == null || !result.Data.Items.Any()) break;
+
+				results.AddRange(result.Data.Items.Where(x => x.Date >= startDate && x.Date <= endDate));
+
+				if (result.Data.Items.Last().Date < startDate) break;
+				if (string.IsNullOrEmpty(result.NextKey)) break;
+
+				_client.NextKey = result.NextKey;
+				_client.ContYn = true;
+
+				await Task.Delay(_client.PagingDelay, cancellationToken);
+			}
+
+			return results;
+		}
+
+		/// <summary>
+		/// | ka11082 | 주식주봉차트정규장조회요청
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="date"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomChartGetRegularMarketWeeklyCharts>> GetRegularMarketWeeklyChartsAsync(string stockCode, DateTime date, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka11082";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode)
+				.AddField("base_dt", date)
+				.AddField("upd_stkpc_tp", isUpdateStockPrice);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomChartGetRegularMarketWeeklyCharts>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// 주식주봉차트정규장조회요청(기간)
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<List<KiwoomChartGetChartItem>> GetRegularMarketWeeklyChartsByRangeAsync(string stockCode, DateTime startDate, DateTime endDate, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			var results = new List<KiwoomChartGetChartItem>();
+			_client.NextKey = string.Empty;
+			_client.ContYn = false;
+
+			while (true)
+			{
+				var result = await GetRegularMarketWeeklyChartsAsync(stockCode, endDate, isUpdateStockPrice, cancellationToken)
+					.ConfigureAwait(false);
+
+				if (result?.Data?.Items == null || !result.Data.Items.Any()) break;
+
+				results.AddRange(result.Data.Items.Where(x => x.Date >= startDate && x.Date <= endDate));
+
+				if (result.Data.Items.Last().Date < startDate) break;
+				if (string.IsNullOrEmpty(result.NextKey)) break;
+
+				_client.NextKey = result.NextKey;
+				_client.ContYn = true;
+
+				await Task.Delay(_client.PagingDelay, cancellationToken);
+			}
+
+			return results;
+		}
+
+		/// <summary>
+		/// | ka11083 | 주식월봉차트정규장조회요청
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="date"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomChartGetRegularMarketMonthlyCharts>> GetRegularMarketMonthlyChartsAsync(string stockCode, DateTime date, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka11083";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode)
+				.AddField("base_dt", date)
+				.AddField("upd_stkpc_tp", isUpdateStockPrice);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomChartGetRegularMarketMonthlyCharts>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// 주식월봉차트정규장조회요청(기간)
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<List<KiwoomChartGetChartItem>> GetRegularMarketMonthlyChartsByRangeAsync(string stockCode, DateTime startDate, DateTime endDate, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			var results = new List<KiwoomChartGetChartItem>();
+			_client.NextKey = string.Empty;
+			_client.ContYn = false;
+
+			while (true)
+			{
+				var result = await GetRegularMarketMonthlyChartsAsync(stockCode, endDate, isUpdateStockPrice, cancellationToken)
+					.ConfigureAwait(false);
+
+				if (result?.Data?.Items == null || !result.Data.Items.Any()) break;
+
+				results.AddRange(result.Data.Items.Where(x => x.Date >= startDate && x.Date <= endDate));
+
+				if (result.Data.Items.Last().Date < startDate) break;
+				if (string.IsNullOrEmpty(result.NextKey)) break;
+
+				_client.NextKey = result.NextKey;
+				_client.ContYn = true;
+
+				await Task.Delay(_client.PagingDelay, cancellationToken);
+			}
+
+			return results;
+		}
+
+		/// <summary>
+		/// | ka11094 | 주식년봉차트정규장조회요청
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="date"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomChartGetRegularMarketYearlyCharts>> GetRegularMarketYearlyChartsAsync(string stockCode, DateTime date, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka11094";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode)
+				.AddField("base_dt", date)
+				.AddField("upd_stkpc_tp", isUpdateStockPrice);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomChartGetRegularMarketYearlyCharts>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// 주식년봉차트정규장조회요청(기간)
+		/// </summary>
+		/// <param name="stockCode"></param>
+		/// <param name="startDate"></param>
+		/// <param name="endDate"></param>
+		/// <param name="isUpdateStockPrice"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<List<KiwoomChartGetYearChartItem>> GetRegularMarketYearlyChartsByRangeAsync(string stockCode, DateTime startDate, DateTime endDate, bool isUpdateStockPrice, CancellationToken cancellationToken = default)
+		{
+			var results = new List<KiwoomChartGetYearChartItem>();
+			_client.NextKey = string.Empty;
+			_client.ContYn = false;
+
+			while (true)
+			{
+				var result = await GetRegularMarketYearlyChartsAsync(stockCode, endDate, isUpdateStockPrice, cancellationToken)
 					.ConfigureAwait(false);
 
 				if (result?.Data?.Items == null || !result.Data.Items.Any()) break;

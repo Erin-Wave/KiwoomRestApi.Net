@@ -27,7 +27,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <param name="ChangeProfitType"></param>
 		/// <param name="stockExchangeType"></param>
 		/// <param name="stockCode"></param>
-		/// <param name="themeName"></param>
+		/// <param name="themeName">※ 키움 API에서 삭제 예정인 파라미터입니다.</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
 		public async Task<KiwoomRestApiResponse<KiwoomThemeGetGroups>> GetGroupsAsync(KiwoomThemeQueryType queryType, int daysBefore, KiwoomThemeChangeProfitType ChangeProfitType, KiwoomThemeStockExchangeType stockExchangeType, string stockCode = "", string themeName = "", CancellationToken cancellationToken = default)

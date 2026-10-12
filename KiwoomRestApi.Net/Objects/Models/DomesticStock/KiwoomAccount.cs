@@ -2009,7 +2009,7 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 		/// <summary>
 		/// 계좌별익일결제예정내역배열
 		/// </summary>
-		[JsonProperty("acnt_nxdy_setl_frcs_array")]
+		[JsonProperty("acnt_nxdy_setl_frcs_prps_array")]
 		public IEnumerable<KiwoomAccountGetNextDaySettlementItem>? Items;
 	}
 	public record KiwoomAccountGetNextDaySettlementItem

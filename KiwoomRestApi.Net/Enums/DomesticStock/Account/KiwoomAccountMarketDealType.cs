@@ -21,6 +21,11 @@ namespace KiwoomRestApi.Net.Enums.DomesticStock.Account
 		/// 코스닥
 		/// </summary>
 		[EnumMember(Value = "0")]
-		Kosdaq
+		Kosdaq,
+		/// <summary>
+		/// KRX금현물 (금현물 주문체결전체조회, 금현물 미체결조회용)
+		/// </summary>
+		[EnumMember(Value = "5")]
+		GoldSpot
 	}
 }

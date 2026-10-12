@@ -1921,6 +1921,41 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 		[JsonProperty("acc_trde_qty")]
 		public decimal? AccumulatedVolume;
 		/// <summary>
+		/// 순매수금액 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("netprps_amt")]
+		public KiwoomDecimal? NetBuyAmount;
+		/// <summary>
+		/// 이전순매수금액 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("prev_netprps_amt")]
+		public KiwoomDecimal? PreviousNetBuyAmount;
+		/// <summary>
+		/// 매수금액 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("buy_amt")]
+		public KiwoomDecimal? BuyAmount;
+		/// <summary>
+		/// 순매수금액증감 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("netprps_amt_irds")]
+		public KiwoomDecimal? NetBuyAmountChange;
+		/// <summary>
+		/// 매수금액증감 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("buy_amt_irds")]
+		public KiwoomDecimal? BuyAmountChange;
+		/// <summary>
+		/// 매도금액 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("sell_amt")]
+		public KiwoomDecimal? SellAmount;
+		/// <summary>
+		/// 매도금액증감 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("sell_amt_irds")]
+		public KiwoomDecimal? SellAmountChange;
+		/// <summary>
 		/// 순매수수량
 		/// </summary>
 		[JsonProperty("netprps_qty")]

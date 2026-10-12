@@ -12,13 +12,112 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 {
 	/// <summary>
 	/// 순위정보 API 클라이언트
-	/// 현재 23개
+	/// 현재 25개
 	/// </summary>
 	/// <param name="client"></param>
 	public class KiwoomRestApiClientDomesticStockRankingInfo(KiwoomRestApiClient client) : BaseClient
 	{
 		private readonly KiwoomRestApiClient _client = client;
 		private readonly string _endpoint = ApiEndpoint.DomesticStock.RankingInfo;
+
+		/// <summary>
+		/// | ka00190 | 대량체결상위
+		/// </summary>
+		/// <param name="marketType">시장구분</param>
+		/// <param name="sortType">정렬기준</param>
+		/// <param name="minCaseAmount">건별금액 (1천만원, 2천만원, 3천만원, 4천만원, 5천만원, 1억원, 3억원, 5억원 이상 중 선택)</param>
+		/// <param name="minTransactionAmount">거래대금 (0:전체, 3천만원, 5천만원, 1억원, 3억원, 5억원, 10억원 이상 중 선택)</param>
+		/// <param name="stockCondition">종목구분</param>
+		/// <param name="minVolume">거래량 (0:전체, 1만주, 5만주, 10만주, 15만주, 20만주, 30만주, 50만주, 100만주 이상 중 선택)</param>
+		/// <param name="creditCondition">신용구분</param>
+		/// <param name="priceCondition">가격구분</param>
+		/// <param name="marketCapCondition">시가총액구분</param>
+		/// <param name="stockExchangeType">거래소구분</param>
+		/// <param name="priceRange">가격조건(사용자) - 단위: 원, 지정하면 가격구분 대신 적용</param>
+		/// <param name="marketCapRange">시가총액조건(사용자) - 단위: 원, 지정하면 시가총액구분 대신 적용</param>
+		/// <param name="transactionAmountRange">거래대금조건(사용자) - 단위: 원, 지정하면 거래대금 대신 적용</param>
+		/// <param name="volumeRange">거래량조건(사용자) - 단위: 주, 지정하면 거래량 대신 적용</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomRankingInfoGetLargeTradeTops>> GetLargeTradeTopsAsync(KiwoomRankingInfoMarketType marketType, KiwoomRankingInfoLargeTradeSortType sortType, decimal minCaseAmount, decimal minTransactionAmount, KiwoomRankingInfoStockCondition stockCondition, decimal minVolume, KiwoomRankingInfoCreditCondition2 creditCondition, KiwoomRankingInfoPriceCondition priceCondition, KiwoomRankingInfoMarketCapCondition marketCapCondition, KiwoomRankingInfoStockExchangeType stockExchangeType, KiwoomRankingInfoRangeCondition? priceRange = null, KiwoomRankingInfoRangeCondition? marketCapRange = null, KiwoomRankingInfoRangeCondition? transactionAmountRange = null, KiwoomRankingInfoRangeCondition? volumeRange = null, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka00190";
+			// 사용자 조건(범위)을 지정한 항목은 구분값을 -1(사용자 조건)로 보냅니다.
+			var body = new HttpParameterMap()
+				.AddField("mrkt_tp", marketType)
+				.AddField("sort_tp", sortType)
+				.AddField("case_pric_tp", minCaseAmount / 10_000_000)
+				.AddField("trde_prica_tp", transactionAmountRange is null ? minTransactionAmount / 10_000_000 : -1m)
+				.AddField("stk_tp", stockCondition)
+				.AddField("trde_qty_tp", volumeRange is null ? minVolume / 1000 : -1m)
+				.AddField("crd_tp", creditCondition)
+				.AddField("pric_tp", priceRange is null ? (int)priceCondition : -1)
+				.AddField("mac_tp", marketCapRange is null ? (int)marketCapCondition : -1)
+				.AddField("stex_tp", stockExchangeType);
+
+			AddRangeCondition(body, "price_cnd", priceRange, 1);
+			AddRangeCondition(body, "mac_cnd", marketCapRange, 100_000_000);
+			// 명세의 필드명이 trde_prica_cnd_min_sgin(오타)이므로 그대로 사용합니다.
+			AddRangeCondition(body, "trde_prica_cnd", transactionAmountRange, 100_000_000, "trde_prica_cnd_min_sgin");
+			AddRangeCondition(body, "trde_qty_cnd", volumeRange, 1000);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomRankingInfoGetLargeTradeTops>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// 사용자 조건(범위) 파라미터({prefix}_tp, _min, _max, _min_sign, _max_sign)를 추가합니다.
+		/// </summary>
+		/// <param name="body"></param>
+		/// <param name="prefix">파라미터 접두어</param>
+		/// <param name="range">범위 조건 (null이면 미설정)</param>
+		/// <param name="unit">API 단위로 환산하기 위한 나눗수</param>
+		/// <param name="minSignKey">최소 부등호 필드명 (기본값: {prefix}_min_sign)</param>
+		private static void AddRangeCondition(HttpParameterMap body, string prefix, KiwoomRankingInfoRangeCondition? range, decimal unit, string? minSignKey = null)
+		{
+			body.AddField($"{prefix}_tp", range is not null)
+				.AddField($"{prefix}_min", range?.Min / unit)
+				.AddField($"{prefix}_max", range?.Max / unit)
+				.AddField(minSignKey ?? $"{prefix}_min_sign", range?.IsMinInclusive)
+				.AddField($"{prefix}_max_sign", range?.IsMaxInclusive);
+		}
+
+		/// <summary>
+		/// | ka00196 | 체결금액대별매매비중
+		/// </summary>
+		/// <param name="stockCode">종목코드 (KRX:039490, NXT:039490_NX, SOR:039490_AL)</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomRankingInfoGetTradeAmountRangeTransactionRatios>> GetTradeAmountRangeTransactionRatiosAsync(string stockCode, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka00196";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomRankingInfoGetTradeAmountRangeTransactionRatios>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// | ka04196 | 수익률상위고객매매상세
+		/// </summary>
+		/// <param name="queryType">조회구분</param>
+		/// <param name="stockExchangeType">거래소구분</param>
+		/// <param name="stockCode">종목코드 (미입력시 전체)</param>
+		/// <param name="startDate">시작일자</param>
+		/// <param name="endDate">종료일자</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomRankingInfoGetTopProfitCustomerTransactionDetails>> GetTopProfitCustomerTransactionDetailsAsync(KiwoomRankingInfoTopProfitCustomerQueryType queryType, KiwoomRankingInfoStockExchangeType stockExchangeType, string stockCode = "", DateTime? startDate = null, DateTime? endDate = null, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka04196";
+			var body = new HttpParameterMap()
+				.AddField("stk_cd", stockCode)
+				.AddField("st_dt", startDate)
+				.AddField("ed_dt", endDate)
+				.AddField("qry_tp", queryType)
+				.AddField("stex_tp", stockExchangeType);
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomRankingInfoGetTopProfitCustomerTransactionDetails>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
 
 		/// <summary>
 		/// | ka10020 | 호가잔량상위요청
@@ -505,15 +604,17 @@ KiwoomRankingInfoPriceCondition2 priceCondition, decimal minTransactionAmount, K
 		/// <param name="marketType"></param>
 		/// <param name="transactionType"></param>
 		/// <param name="institutionType"></param>
+		/// <param name="amountQuantityType">금액수량구분 (매도/매수 값의 단위)</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task<KiwoomRestApiResponse<KiwoomRankingInfoGetOpenMarketInvestorTransactionTops>> GetOpenMarketInvestorTransactionTopsAsync(KiwoomRankingInfoMarketType marketType, KiwoomRankingInfoNetTransactionType2 transactionType, KiwoomRankingInfoInstitutionType institutionType, CancellationToken cancellationToken = default)
+		public async Task<KiwoomRestApiResponse<KiwoomRankingInfoGetOpenMarketInvestorTransactionTops>> GetOpenMarketInvestorTransactionTopsAsync(KiwoomRankingInfoMarketType marketType, KiwoomRankingInfoNetTransactionType2 transactionType, KiwoomRankingInfoInstitutionType institutionType, KiwoomRankingInfoAmountQuantityType? amountQuantityType = null, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ka10065";
 			var body = new HttpParameterMap()
 				.AddField("mrkt_tp", marketType)
 				.AddField("trde_tp", transactionType)
-				.AddField("orgn_tp", institutionType);
+				.AddField("orgn_tp", institutionType)
+				.AddField("amt_qty_tp", amountQuantityType);
 
 			return await _client.PostKiwoomRestApiAsync<KiwoomRankingInfoGetOpenMarketInvestorTransactionTops>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
 		}
@@ -529,6 +630,7 @@ KiwoomRankingInfoPriceCondition2 priceCondition, decimal minTransactionAmount, K
 		/// <param name="minTransactionAmount"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
+		[Obsolete("KRX 시간외단일가 시장 폐지로 ka10098 TR이 2026-09-12에 삭제되었습니다.")]
 		public async Task<KiwoomRestApiResponse<KiwoomRankingInfoGetAfterMarketSinglePriceChangeRateRanks>> GetAfterMarketSinglePriceChangeRateRanksAsync(KiwoomRankingInfoMarketType marketType, KiwoomRankingInfoChangeSortType sortType, KiwoomRankingInfoStockCondition stockCondition, decimal minVolume, KiwoomRankingInfoCreditCondition creditCondition, decimal minTransactionAmount, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ka10098";

@@ -5,6 +5,8 @@ using KiwoomRestApi.Net.Objects.Models;
 using KiwoomRestApi.Net.Objects.Models.DomesticStock;
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -12,7 +14,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 {
 	/// <summary>
 	/// 종목정보 API 클라이언트
-	/// 현재 31개
+	/// 현재 32개
 	/// </summary>
 	/// <param name="client"></param>
 	public class KiwoomRestApiClientDomesticStockInfo(KiwoomRestApiClient client) : BaseClient
@@ -610,6 +612,21 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 			var body = new HttpParameterMap();
 
 			return await _client.PostKiwoomRestApiAsync<KiwoomStockInfoGetMemberCompanys>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// | ka10103 | 종목메모 조회
+		/// </summary>
+		/// <param name="stockCodes">종목코드 목록 (6자리)</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomStockInfoGetStockMemos>> GetStockMemosAsync(IEnumerable<string> stockCodes, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "ka10103";
+			var body = new HttpParameterMap()
+				.AddRawField("input_list", stockCodes.Select(stockCode => new KiwoomStockInfoMemoStock { StockCode = stockCode }).ToList());
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomStockInfoGetStockMemos>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>

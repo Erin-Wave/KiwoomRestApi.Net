@@ -2,7 +2,6 @@
 using KiwoomRestApi.Net.Objects;
 using KiwoomRestApi.Net.Objects.Commons;
 using KiwoomRestApi.Net.Objects.Models;
-using KiwoomRestApi.Net.Objects.Models.DomesticStock;
 
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -265,11 +264,17 @@ namespace KiwoomRestApi.Net.Clients
 											if (data != null)
 												OnConditionSearchRequestRealtime2Received?.Invoke(data);
 										}
-										else
+										else if (firstItem?["jmcode"] != null)
 										{
 											var data = dataNode.ToObject<IEnumerable<KiwoomWebSocketConditionSearchRequestRealtime>>();
 											if (data != null)
 												OnConditionSearchRequestRealtimeReceived?.Invoke(data);
+										}
+										else
+										{
+											var data = dataNode.ToObject<IEnumerable<KiwoomWebSocketConditionSearchRequest>>();
+											if (data != null)
+												OnConditionSearchRequestReceived?.Invoke(data);
 										}
 									}
 								}

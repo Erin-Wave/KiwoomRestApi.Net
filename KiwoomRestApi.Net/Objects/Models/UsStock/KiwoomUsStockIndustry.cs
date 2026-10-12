@@ -120,6 +120,16 @@ namespace KiwoomRestApi.Net.Objects.Models.UsStock
 		[JsonProperty("trde_prica")]
 		public decimal? TransactionAmount;
 		/// <summary>
+		/// 매도호가
+		/// </summary>
+		[JsonProperty("sel_bid")]
+		public KiwoomDecimal? SellBid;
+		/// <summary>
+		/// 매수호가
+		/// </summary>
+		[JsonProperty("buy_bid")]
+		public KiwoomDecimal? BuyBid;
+		/// <summary>
 		/// 시가
 		/// </summary>
 		[JsonProperty("open_pric")]

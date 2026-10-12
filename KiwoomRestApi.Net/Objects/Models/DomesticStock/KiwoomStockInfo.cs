@@ -1,5 +1,6 @@
 ﻿using KiwoomRestApi.Net.Converters;
 using KiwoomRestApi.Net.Enums.DomesticStock.StockInfo;
+using KiwoomRestApi.Net.Enums.DomesticStock.Watchlist;
 using KiwoomRestApi.Net.Objects.Commons;
 
 using Newtonsoft.Json;
@@ -2379,6 +2380,11 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 	public record KiwoomStockInfoGetIndustryCodeItem
 	{
 		/// <summary>
+		/// 시장구분코드
+		/// </summary>
+		[JsonProperty("marketCode")]
+		public string? MarketCode;
+		/// <summary>
 		/// 코드
 		/// </summary>
 		[JsonProperty("code")]
@@ -2646,5 +2652,47 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 		/// </summary>
 		[JsonProperty("crd_alow_yn")]
 		public string? CreditAvailable;
+	}
+
+	/// <summary>
+	/// 종목메모 조회 요청 종목 (요청용)
+	/// </summary>
+	public record KiwoomStockInfoMemoStock
+	{
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+	}
+
+	public record KiwoomStockInfoGetStockMemos
+	{
+		/// <summary>
+		/// 처리결과
+		/// </summary>
+		[JsonProperty("rtcd")]
+		private string? RawResult { get; set; }
+		public KiwoomWatchlistResult Result => RawResult switch
+		{
+			"S" => KiwoomWatchlistResult.Success,
+			"F" => KiwoomWatchlistResult.Failure,
+			_ => KiwoomWatchlistResult.Failure
+		};
+		/// <summary>
+		/// 종목메모 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomStockInfoGetStockMemoItem>? Items;
+	}
+	public record KiwoomStockInfoGetStockMemoItem
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 메모내용 - 영웅문4 관심종목의 메모 내용
+		/// </summary>
+		[JsonProperty("memo")]
+		public string? Memo;
 	}
 }

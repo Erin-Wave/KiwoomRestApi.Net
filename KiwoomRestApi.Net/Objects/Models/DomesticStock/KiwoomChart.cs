@@ -230,6 +230,11 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 		[JsonProperty("low_pric")]
 		public KiwoomDecimal? Low;
 		/// <summary>
+		/// 누적거래량 (분봉차트에서만 제공)
+		/// </summary>
+		[JsonProperty("acc_trde_qty")]
+		public decimal? AccumulatedVolume;
+		/// <summary>
 		/// 전일대비
 		/// </summary>
         [JsonProperty("pred_pre")]
@@ -239,6 +244,16 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 		/// </summary>
         [JsonProperty("pred_pre_sig")]
         public string? ChangeSign;
+		/// <summary>
+		/// 수정구분자 - ,구분으로 복수개 출력 가능 (1:유상증자, 2:무상증자, 4:배당락, 8:액면분할, 16:액면병합, 32:기업합병, 64:감자, 256:권리락)
+		/// </summary>
+		[JsonProperty("upd_stkpc_tp")]
+		public string? UpdatedStockPriceType;
+		/// <summary>
+		/// 수정비율
+		/// </summary>
+		[JsonProperty("upd_rt")]
+		public string? UpdateRate;
     }
 
 	public record KiwoomChartGetDailyCharts
@@ -333,6 +348,16 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
         /// </summary>
         [JsonProperty("trde_tern_rt")]
         public KiwoomDecimal? TradeTurnoverRate;
+		/// <summary>
+		/// 수정구분자 - ,구분으로 복수개 출력 가능 (1:유상증자, 2:무상증자, 4:배당락, 8:액면분할, 16:액면병합, 32:기업합병, 64:감자, 256:권리락)
+		/// </summary>
+		[JsonProperty("upd_stkpc_tp")]
+		public string? UpdatedStockPriceType;
+		/// <summary>
+		/// 수정비율
+		/// </summary>
+		[JsonProperty("upd_rt")]
+		public string? UpdateRate;
     }
 
     public record KiwoomChartGetYearlyCharts
@@ -386,7 +411,101 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
         /// </summary>
         [JsonProperty("low_pric")]
         public KiwoomDecimal? Low;
+		/// <summary>
+		/// 수정구분자 - ,구분으로 복수개 출력 가능 (1:유상증자, 2:무상증자, 4:배당락, 8:액면분할, 16:액면병합, 32:기업합병, 64:감자, 256:권리락)
+		/// </summary>
+		[JsonProperty("upd_stkpc_tp")]
+		public string? UpdatedStockPriceType;
+		/// <summary>
+		/// 수정비율
+		/// </summary>
+		[JsonProperty("upd_rt")]
+		public string? UpdateRate;
     }
+
+	public record KiwoomChartGetRegularMarketTickCharts
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 마지막틱갯수
+		/// </summary>
+		[JsonProperty("last_tic_cnt")]
+		public int? LastTickCount;
+		/// <summary>
+		/// 주식틱차트정규장조회 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomChartGetTickChartItem>? Items;
+	}
+	public record KiwoomChartGetRegularMarketMinuteCharts
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 주식분봉차트정규장조회 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomChartGetTickChartItem>? Items;
+	}
+	public record KiwoomChartGetRegularMarketDailyCharts
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 주식일봉차트정규장조회 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomChartGetChartItem>? Items;
+	}
+	public record KiwoomChartGetRegularMarketWeeklyCharts
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 주식주봉차트정규장조회 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomChartGetChartItem>? Items;
+	}
+	public record KiwoomChartGetRegularMarketMonthlyCharts
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 주식월봉차트정규장조회 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomChartGetChartItem>? Items;
+	}
+	public record KiwoomChartGetRegularMarketYearlyCharts
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 주식년봉차트정규장조회 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomChartGetYearChartItem>? Items;
+	}
 
     public record KiwoomChartGetIndustryTickCharts
 	{

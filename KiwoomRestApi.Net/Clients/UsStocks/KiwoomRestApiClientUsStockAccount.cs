@@ -180,10 +180,10 @@ namespace KiwoomRestApi.Net.Clients.UsStocks
 		/// <param name="transactionType">구분</param>
 		/// <param name="exchangeType">거래소구분</param>
 		/// <param name="stockCode">종목코드</param>
-		/// <param name="excludeKrwReplacementDepositWithdrawal">원화대용입출금제외여부 (Y:제외,N:비제외)</param>
+		/// <param name="excludeKrwReplacementDepositWithdrawal">원화대용입출금제외여부 (true:제외, false:비제외)</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task<KiwoomRestApiResponse<KiwoomUsStockAccountGetTransactionHistory>> GetTransactionHistoryAsync(DateTime? startDate = null, DateTime? endDate = null, KiwoomUsStockAccountTransactionType? transactionType = null, KiwoomUsStockInfoExchangeType? exchangeType = null, string? stockCode = null, bool? excludeKrwReplacementDepositWithdrawal = null, CancellationToken cancellationToken = default)
+		public async Task<KiwoomRestApiResponse<KiwoomUsStockAccountGetTransactionHistory>> GetTransactionHistoryAsync(DateTime startDate, DateTime endDate, KiwoomUsStockAccountTransactionType transactionType = KiwoomUsStockAccountTransactionType.All, KiwoomUsStockInfoExchangeType? exchangeType = null, string? stockCode = null, bool excludeKrwReplacementDepositWithdrawal = false, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ust21100";
 			var body = new HttpParameterMap()
@@ -192,7 +192,7 @@ namespace KiwoomRestApi.Net.Clients.UsStocks
 				.AddField("tp", transactionType)
 				.AddField("stex_tp", exchangeType)
 				.AddField("stk_cd", stockCode)
-				.AddField("krw_repl_skip_yn", excludeKrwReplacementDepositWithdrawal.HasValue ? (excludeKrwReplacementDepositWithdrawal.Value ? "Y" : "N") : null);
+				.AddField("krw_repl_skip_yn", excludeKrwReplacementDepositWithdrawal ? "Y" : "N");
 
 			return await _client.PostKiwoomRestApiAsync<KiwoomUsStockAccountGetTransactionHistory>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
 		}
@@ -486,11 +486,11 @@ namespace KiwoomRestApi.Net.Clients.UsStocks
 		/// <summary>
 		/// | ust21650 | 미국주식 기간별 수익률 현황
 		/// </summary>
-		/// <param name="fromDate">조회시작일자</param>
+		/// <param name="fromDate">조회시작일자 (조회 기간은 최대 6개월)</param>
 		/// <param name="toDate">조회종료일자</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task<KiwoomRestApiResponse<KiwoomUsStockAccountGetPeriodProfitRates>> GetPeriodProfitRatesAsync(DateTime? fromDate = null, DateTime? toDate = null, CancellationToken cancellationToken = default)
+		public async Task<KiwoomRestApiResponse<KiwoomUsStockAccountGetPeriodProfitRates>> GetPeriodProfitRatesAsync(DateTime fromDate, DateTime toDate, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ust21650";
 			var body = new HttpParameterMap()

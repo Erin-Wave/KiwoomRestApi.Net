@@ -6,7 +6,7 @@
 
 		<!-- Package Information -->
 		<PackageId>KiwoomRestApi.Net</PackageId>
-		<Version>0.9.0</Version>
+		<Version>0.10.0</Version>
 		<Title>Kiwoom Securities REST API wrapper for .NET</Title>
 		<Description>Kiwoom REST API wrapper for .NET 키움증권 OpenAPI REST API를 위한 현대적이고 직관적인 .NET Wrapper 라이브러리 주식 거래, 계좌 조회, 실시간 데이터, 차트 분석 등 키움증권의 모든 REST API 기능을 간편하게 사용할 수 있습니다.</Description>
 		<Authors>Gaten</Authors>

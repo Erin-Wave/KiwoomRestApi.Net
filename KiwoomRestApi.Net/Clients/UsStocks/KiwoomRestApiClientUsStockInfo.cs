@@ -14,7 +14,7 @@ namespace KiwoomRestApi.Net.Clients.UsStocks
 {
 	/// <summary>
 	/// 미국주식 종목정보 API 클라이언트
-	/// 현재 33개
+	/// 현재 34개
 	/// </summary>
 	/// <param name="client"></param>
 	public class KiwoomRestApiClientUsStockInfo(KiwoomRestApiClient client) : BaseClient
@@ -82,6 +82,21 @@ namespace KiwoomRestApi.Net.Clients.UsStocks
 				.AddField("stk_cd", stockCode);
 
 			return await _client.PostKiwoomRestApiAsync<KiwoomUsStockInfoGetStock>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
+		}
+
+		/// <summary>
+		/// | usa10103 | 미국주식 종목메모 조회
+		/// </summary>
+		/// <param name="stocks">조회할 종목 (거래소구분, 종목코드) - 최대 100개, 거래소구분은 All(%)을 사용할 수 없음</param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		public async Task<KiwoomRestApiResponse<KiwoomUsStockInfoGetStockMemos>> GetStockMemosAsync(IEnumerable<(KiwoomUsStockInfoExchangeType ExchangeType, string StockCode)> stocks, CancellationToken cancellationToken = default)
+		{
+			const string apiId = "usa10103";
+			var body = new HttpParameterMap()
+				.AddRawField("input_list", ToWatchlist(stocks));
+
+			return await _client.PostKiwoomRestApiAsync<KiwoomUsStockInfoGetStockMemos>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
 		}
 
 		/// <summary>

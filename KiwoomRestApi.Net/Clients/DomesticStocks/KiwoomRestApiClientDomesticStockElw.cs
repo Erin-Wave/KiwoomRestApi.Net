@@ -157,10 +157,11 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		public async Task<KiwoomRestApiResponse<KiwoomElwGetConditionSearchs>> GetConditionSearchsAsync(KiwoomElwCompanyCode issuerCompanyCode, string baseAssetCode, KiwoomElwRightsType rightsType, KiwoomElwCompanyCode lpCode, KiwoomElwSortType sortType, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ka30005";
+			// ka30005는 다른 ELW TR(000~007)과 달리 권리구분을 1자리(0~7)로 받습니다.
 			var body = new HttpParameterMap()
 				.AddField("isscomp_cd", issuerCompanyCode)
 				.AddField("bsis_aset_cd", baseAssetCode)
-				.AddField("rght_tp", rightsType)
+				.AddField("rght_tp", (int)rightsType)
 				.AddField("lpcd", lpCode)
 				.AddField("sort_tp", sortType);
 

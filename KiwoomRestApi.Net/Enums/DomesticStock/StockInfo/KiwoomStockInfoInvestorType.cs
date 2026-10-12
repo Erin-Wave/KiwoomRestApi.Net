@@ -18,6 +18,10 @@
 		/// </summary>
 		InvestmentTrust = 3000,
 		/// <summary>
+		/// 사모펀드
+		/// </summary>
+		PrivateEquityFund = 3100,
+		/// <summary>
 		/// 은행
 		/// </summary>
 		Bank = 4000,

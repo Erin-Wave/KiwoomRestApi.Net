@@ -58,6 +58,10 @@ namespace KiwoomRestApi.Net.Enums.DomesticStock.StockInfo
 		/// </summary>
 		Kospi = 0,
 		/// <summary>
+		/// 인프라투융자
+		/// </summary>
+		Infrastructure = 2,
+		/// <summary>
 		/// ELW
 		/// </summary>
 		Elw = 3,
@@ -73,6 +77,10 @@ namespace KiwoomRestApi.Net.Enums.DomesticStock.StockInfo
 		/// 리츠
 		/// </summary>
 		Reit = 6,
+		/// <summary>
+		/// 신주인수권증서
+		/// </summary>
+		WarrantCertificates = 7,
 		/// <summary>
 		/// ETF
 		/// </summary>
@@ -92,7 +100,23 @@ namespace KiwoomRestApi.Net.Enums.DomesticStock.StockInfo
 		/// <summary>
 		/// 코넥스
 		/// </summary>
-		Konex = 50
+		Konex = 50,
+		/// <summary>
+		/// ETN
+		/// </summary>
+		Etn = 60,
+		/// <summary>
+		/// 손실제한 ETN
+		/// </summary>
+		LossLimitedEtn = 70,
+		/// <summary>
+		/// 금현물
+		/// </summary>
+		GoldSpot = 80,
+		/// <summary>
+		/// 변동성 ETN
+		/// </summary>
+		VolatilityEtn = 90
 	}
 
 	/// <summary>

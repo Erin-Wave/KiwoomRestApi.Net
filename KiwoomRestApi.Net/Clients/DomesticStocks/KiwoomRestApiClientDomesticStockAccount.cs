@@ -429,9 +429,10 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <param name="stockCode"></param>
 		/// <param name="currencyCode"></param>
 		/// <param name="foreignStockExchangeCode"></param>
+		/// <param name="sortType">조회정렬구분 (미입력시 과거거래순)</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task<KiwoomRestApiResponse<KiwoomAccountGetConsignedTransactions>> GetConsignedTransactionsAsync(KiwoomAccountTransactionType2 transactionType, KiwoomAccountGoodsType goodsType, KiwoomAccountDomesticStockExchangeType domesticStockExchangeType, DateTime startDate, DateTime endDate, string stockCode = "", string currencyCode = "", string foreignStockExchangeCode = "", CancellationToken cancellationToken = default)
+		public async Task<KiwoomRestApiResponse<KiwoomAccountGetConsignedTransactions>> GetConsignedTransactionsAsync(KiwoomAccountTransactionType2 transactionType, KiwoomAccountGoodsType goodsType, KiwoomAccountDomesticStockExchangeType domesticStockExchangeType, DateTime startDate, DateTime endDate, string stockCode = "", string currencyCode = "", string foreignStockExchangeCode = "", KiwoomAccountQuerySortType? sortType = null, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "kt00015";
 			var body = new HttpParameterMap()
@@ -442,7 +443,8 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 				.AddField("end_dt", endDate)
 				.AddField("stk_cd", stockCode)
 				.AddField("crnc_cd", currencyCode)
-				.AddField("frgn_stex_code", foreignStockExchangeCode);
+				.AddField("frgn_stex_code", foreignStockExchangeCode)
+				.AddField("qry_sort_tp", sortType);
 
 			return await _client.PostKiwoomRestApiAsync<KiwoomAccountGetConsignedTransactions>(_endpoint, apiId, body, cancellationToken).ConfigureAwait(false);
 		}
@@ -539,7 +541,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// | kt50030 | 금현물 주문체결전체조회
 		/// </summary>
 		/// <param name="date"></param>
-		/// <param name="marketDealType"></param>
+		/// <param name="marketDealType">시장구분 (명세상 GoldSpot(5:KRX금현물) 고정)</param>
 		/// <param name="stockBondType"></param>
 		/// <param name="transactionType"></param>
 		/// <param name="queryType"></param>
@@ -619,7 +621,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// | kt50075 | 금현물 미체결조회
 		/// </summary>
 		/// <param name="date"></param>
-		/// <param name="marketDealType"></param>
+		/// <param name="marketDealType">시장구분 (명세상 GoldSpot(5:KRX금현물) 고정)</param>
 		/// <param name="stockBondType"></param>
 		/// <param name="transactionType"></param>
 		/// <param name="queryType"></param>

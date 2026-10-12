@@ -23,6 +23,7 @@ using KiwoomRestApi.Net.Enums.UsStock.Order;
 using KiwoomRestApi.Net.Enums.UsStock.RankingInfo;
 using KiwoomRestApi.Net.Enums.UsStock.StockInfo;
 using KiwoomRestApi.Net.Misc;
+using KiwoomRestApi.Net.Objects.Models.DomesticStock;
 
 namespace KiwoomRestApi.Net.Tests
 {
@@ -126,6 +127,59 @@ namespace KiwoomRestApi.Net.Tests
 		{
 			DateTime date = DateTime.Parse(_date);
 			var result = await client.Chart.GetYearlyChartsAsync(stockCode, date, isUpdateStockPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase("005930", 100, true)]
+		public async Task GetRegularMarketTickChartsAsync(string stockCode, int tickCount, bool isUpdateStockPrice)
+		{
+			var result = await client.DomesticStock.Chart.GetRegularMarketTickChartsAsync(stockCode, tickCount, isUpdateStockPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase("005930", 1, "2026-10-02", true)]
+		public async Task GetRegularMarketMinuteChartsAsync(string stockCode, int tickCount, string _date, bool isUpdateStockPrice)
+		{
+			DateTime date = DateTime.Parse(_date);
+			var result = await client.DomesticStock.Chart.GetRegularMarketMinuteChartsAsync(stockCode, tickCount, date, isUpdateStockPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase("005930", "2026-10-02", true)]
+		public async Task GetRegularMarketDailyChartsAsync(string stockCode, string _date, bool isUpdateStockPrice)
+		{
+			DateTime date = DateTime.Parse(_date);
+			var result = await client.DomesticStock.Chart.GetRegularMarketDailyChartsAsync(stockCode, date, isUpdateStockPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase("005930", "2026-10-02", true)]
+		public async Task GetRegularMarketWeeklyChartsAsync(string stockCode, string _date, bool isUpdateStockPrice)
+		{
+			DateTime date = DateTime.Parse(_date);
+			var result = await client.DomesticStock.Chart.GetRegularMarketWeeklyChartsAsync(stockCode, date, isUpdateStockPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase("005930", "2026-10-02", true)]
+		public async Task GetRegularMarketMonthlyChartsAsync(string stockCode, string _date, bool isUpdateStockPrice)
+		{
+			DateTime date = DateTime.Parse(_date);
+			var result = await client.DomesticStock.Chart.GetRegularMarketMonthlyChartsAsync(stockCode, date, isUpdateStockPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase("005930", "2026-10-02", true)]
+		public async Task GetRegularMarketYearlyChartsAsync(string stockCode, string _date, bool isUpdateStockPrice)
+		{
+			DateTime date = DateTime.Parse(_date);
+			var result = await client.DomesticStock.Chart.GetRegularMarketYearlyChartsAsync(stockCode, date, isUpdateStockPrice);
 
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
@@ -573,6 +627,7 @@ namespace KiwoomRestApi.Net.Tests
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
 
+		[Ignore("ka10009 TR 삭제 (2026-06-18)")]
 		[TestCase("005930")]
 		public async Task GetDailyAsync(string stockCode)
 		{
@@ -1031,6 +1086,13 @@ namespace KiwoomRestApi.Net.Tests
 			var result = await client.StockInfo.GetCreditLoanAvailableAsync(stockCode);
 			Assert.That(result.ReturnCode, Is.EqualTo(0).Or.EqualTo(20));
 		}
+
+		[TestCase("005930", "000660")]
+		public async Task GetStockMemosAsync(string stockCode1, string stockCode2)
+		{
+			var result = await client.DomesticStock.StockInfo.GetStockMemosAsync([stockCode1, stockCode2]);
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
 		#endregion
 
 		#region MarketCondition
@@ -1148,6 +1210,7 @@ namespace KiwoomRestApi.Net.Tests
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
 
+		[Ignore("ka10087 TR 삭제 (2026-09-12)")]
 		[TestCase("005930")]
 		public async Task GetAfterMarketSinglePriceOrderBookAsync(string stockCode)
 		{
@@ -1155,6 +1218,7 @@ namespace KiwoomRestApi.Net.Tests
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
 
+		[Ignore("ka10087 TR 삭제 (2026-09-12)")]
 		[TestCase("005930")]
 		public async Task GetAfterMarketSinglePriceOrderBookListAsync(string stockCode)
 		{
@@ -1369,6 +1433,7 @@ namespace KiwoomRestApi.Net.Tests
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
 
+		[Ignore("ka10098 TR 삭제 (2026-09-12)")]
 		[TestCase(KiwoomRankingInfoMarketType.Kosdaq, KiwoomRankingInfoChangeSortType.DownRate, KiwoomRankingInfoStockCondition.OnlyKospi30, 500_000, KiwoomRankingInfoCreditCondition.CreditD, 300_000_000)]
 		public async Task GetAfterMarketSinglePriceChangeRateRanksAsync(KiwoomRankingInfoMarketType marketType, KiwoomRankingInfoChangeSortType sortType, KiwoomRankingInfoStockCondition stockCondition, decimal minVolume, KiwoomRankingInfoCreditCondition creditCondition, decimal minTransactionAmount)
 		{
@@ -1385,6 +1450,36 @@ namespace KiwoomRestApi.Net.Tests
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
 
+
+		[TestCase(KiwoomRankingInfoMarketType.All, KiwoomRankingInfoLargeTradeSortType.BuyTop, 10_000_000, 0, KiwoomRankingInfoStockCondition.All, 0, KiwoomRankingInfoCreditCondition2.All, KiwoomRankingInfoPriceCondition.All, KiwoomRankingInfoMarketCapCondition.All, KiwoomRankingInfoStockExchangeType.Unified)]
+		public async Task GetLargeTradeTopsAsync(KiwoomRankingInfoMarketType marketType, KiwoomRankingInfoLargeTradeSortType sortType, decimal minCaseAmount, decimal minTransactionAmount, KiwoomRankingInfoStockCondition stockCondition, decimal minVolume, KiwoomRankingInfoCreditCondition2 creditCondition, KiwoomRankingInfoPriceCondition priceCondition, KiwoomRankingInfoMarketCapCondition marketCapCondition, KiwoomRankingInfoStockExchangeType stockExchangeType)
+		{
+			var result = await client.DomesticStock.RankingInfo.GetLargeTradeTopsAsync(marketType, sortType, minCaseAmount, minTransactionAmount, stockCondition, minVolume, creditCondition, priceCondition, marketCapCondition, stockExchangeType);
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[Test]
+		public async Task GetLargeTradeTopsWithRangeAsync()
+		{
+			var priceRange = new KiwoomRankingInfoRangeCondition { Min = 10_000, Max = 100_000 };
+			var result = await client.DomesticStock.RankingInfo.GetLargeTradeTopsAsync(KiwoomRankingInfoMarketType.Kospi, KiwoomRankingInfoLargeTradeSortType.SellTop, 100_000_000, 0, KiwoomRankingInfoStockCondition.All, 0, KiwoomRankingInfoCreditCondition2.All, KiwoomRankingInfoPriceCondition.All, KiwoomRankingInfoMarketCapCondition.All, KiwoomRankingInfoStockExchangeType.Krx, priceRange: priceRange);
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase("005930_AL")]
+		public async Task GetTradeAmountRangeTransactionRatiosAsync(string stockCode)
+		{
+			var result = await client.DomesticStock.RankingInfo.GetTradeAmountRangeTransactionRatiosAsync(stockCode);
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase(KiwoomRankingInfoTopProfitCustomerQueryType.ProfitRate, KiwoomRankingInfoStockExchangeType.Unified, "")]
+		[TestCase(KiwoomRankingInfoTopProfitCustomerQueryType.NetTransaction, KiwoomRankingInfoStockExchangeType.Krx, "005930")]
+		public async Task GetTopProfitCustomerTransactionDetailsAsync(KiwoomRankingInfoTopProfitCustomerQueryType queryType, KiwoomRankingInfoStockExchangeType stockExchangeType, string stockCode)
+		{
+			var result = await client.DomesticStock.RankingInfo.GetTopProfitCustomerTransactionDetailsAsync(queryType, stockExchangeType, stockCode);
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
 		#endregion
 
 		#region Industry
@@ -1442,7 +1537,6 @@ namespace KiwoomRestApi.Net.Tests
 
 		[TestCase(KiwoomThemeQueryType.All, 1, KiwoomThemeChangeProfitType.TopPeriodProfitRate, KiwoomThemeStockExchangeType.Krx, "", "")]
 		[TestCase(KiwoomThemeQueryType.Stock, 5, KiwoomThemeChangeProfitType.TopChangeRate, KiwoomThemeStockExchangeType.Krx, "005930", "")]
-		[TestCase(KiwoomThemeQueryType.Theme, 3, KiwoomThemeChangeProfitType.BottomPeriodProfitRate, KiwoomThemeStockExchangeType.Krx, "", "AI")]
 		public async Task GetGroupsAsync(KiwoomThemeQueryType queryType, int daysBefore, KiwoomThemeChangeProfitType changeProfitType, KiwoomThemeStockExchangeType stockExchangeType, string stockCode, string themeName)
 		{
 			var result = await client.Theme.GetGroupsAsync(queryType, daysBefore, changeProfitType, stockExchangeType, stockCode, themeName);
@@ -1513,6 +1607,46 @@ namespace KiwoomRestApi.Net.Tests
 		public async Task GetUsStockAvailableOrderQuantityAsync(string stockCode, decimal buyPrice, KiwoomUsStockOrderExchangeType exchangeType)
 		{
 			var result = await client.UsStock.Order.GetAvailableOrderQuantityAsync(stockCode, buyPrice, exchangeType);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase(KiwoomUsStockOrderReservationType.Normal, KiwoomUsStockOrderExchangeType.Nasdaq, "AAPL", 1.0, KiwoomUsStockOrderTransactionType.Limit, 1.0)]
+		public async Task UsStockReserveBuyOrderAsync(KiwoomUsStockOrderReservationType reservationType, KiwoomUsStockOrderExchangeType exchangeType, string stockCode, decimal orderQuantity, KiwoomUsStockOrderTransactionType tradeType, decimal? orderPrice)
+		{
+			var result = await client.UsStock.Order.ReserveBuyOrderAsync(reservationType, exchangeType, stockCode, orderQuantity, tradeType, orderPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0).Or.EqualTo(20));
+		}
+
+		[TestCase(KiwoomUsStockOrderReservationType.Normal, KiwoomUsStockOrderExchangeType.Nasdaq, "AAPL", 1.0, KiwoomUsStockOrderTransactionType.Limit, 9999.0)]
+		public async Task UsStockReserveSellOrderAsync(KiwoomUsStockOrderReservationType reservationType, KiwoomUsStockOrderExchangeType exchangeType, string stockCode, decimal orderQuantity, KiwoomUsStockOrderTransactionType tradeType, decimal? orderPrice)
+		{
+			var result = await client.UsStock.Order.ReserveSellOrderAsync(reservationType, exchangeType, stockCode, orderQuantity, tradeType, orderPrice);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0).Or.EqualTo(20));
+		}
+
+		[TestCase("000000000001", KiwoomUsStockOrderExchangeType.Nasdaq, "AAPL")]
+		public async Task UsStockCancelReservedOrderAsync(string reservationOrderId, KiwoomUsStockOrderExchangeType exchangeType, string stockCode)
+		{
+			var result = await client.UsStock.Order.CancelReservedOrderAsync(DateTime.Today, reservationOrderId, exchangeType, stockCode);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0).Or.EqualTo(20));
+		}
+
+		[TestCase(KiwoomUsStockOrderReservationQueryType.All)]
+		public async Task GetUsStockDailyReservedOrdersAsync(KiwoomUsStockOrderReservationQueryType reservationType)
+		{
+			var result = await client.UsStock.Order.GetDailyReservedOrdersAsync(reservationType);
+
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[Test]
+		public async Task GetUsStockReservedOrdersAsync()
+		{
+			var result = await client.UsStock.Order.GetReservedOrdersAsync(DateTime.Today.AddDays(-7), DateTime.Today, reservationType: KiwoomUsStockOrderReservationQueryType.All);
 
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
@@ -1638,6 +1772,13 @@ namespace KiwoomRestApi.Net.Tests
 		public async Task GetUsStockStockAsync(string stockCode, KiwoomUsStockInfoExchangeType exchangeType)
 		{
 			var result = await client.UsStock.StockInfo.GetStockAsync(stockCode, exchangeType);
+			Assert.That(result.ReturnCode, Is.EqualTo(0));
+		}
+
+		[TestCase(KiwoomUsStockInfoExchangeType.Nasdaq, "AAPL")]
+		public async Task GetUsStockStockMemosAsync(KiwoomUsStockInfoExchangeType exchangeType, string stockCode)
+		{
+			var result = await client.UsStock.StockInfo.GetStockMemosAsync([(exchangeType, stockCode)]);
 			Assert.That(result.ReturnCode, Is.EqualTo(0));
 		}
 

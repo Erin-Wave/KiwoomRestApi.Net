@@ -14,7 +14,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 {
 	/// <summary>
 	/// 시세 API 클라이언트
-	/// 현재 25개
+	/// 현재 24개
 	/// </summary>
 	/// <param name="client"></param>
 	public class KiwoomRestApiClientDomesticStockMarketCondition(KiwoomRestApiClient client) : BaseClient
@@ -297,6 +297,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <param name="stockCode"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
+		[Obsolete("KRX 시간외단일가 시장 폐지로 ka10087 TR이 2026-09-12에 삭제되었습니다.")]
 		public async Task<KiwoomRestApiResponse<KiwoomMarketConditionGetAfterMarketSinglePriceOrderBook>> GetAfterMarketSinglePriceOrderBookAsync(string stockCode, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ka10087";
@@ -312,6 +313,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <param name="stockCode"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
+		[Obsolete("KRX 시간외단일가 시장 폐지로 ka10087 TR이 2026-09-12에 삭제되었습니다.")]
 		public async Task<KiwoomRestApiResponse<KiwoomMarketConditionGetAfterMarketSinglePriceOrderBookList>> GetAfterMarketSinglePriceOrderBookListAsync(string stockCode, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ka10087";
@@ -404,7 +406,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <summary>
 		/// | ka90005 | 프로그램매매추이요청 시간대별
 		/// </summary>
-		/// <param name="date"></param>
+		/// <param name="date">※ 키움 API에서 삭제 예정인 파라미터이며, 다른 날짜를 지정해도 당일 데이터만 제공됩니다.</param>
 		/// <param name="amountQuantityType"></param>
 		/// <param name="marketType"></param>
 		/// <param name="tickMinuteType"></param>
@@ -477,7 +479,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <summary>
 		/// | ka90008 | 종목시간별프로그램매매추이요청
 		/// </summary>
-		/// <param name="date"></param>
+		/// <param name="date">※ 키움 API에서 삭제 예정인 파라미터이며, 다른 날짜를 지정해도 당일 데이터만 제공됩니다.</param>
 		/// <param name="stockCode"></param>
 		/// <param name="amountQuantityType"></param>
 		/// <param name="cancellationToken"></param>

@@ -12,7 +12,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 {
 	/// <summary>
 	/// 기관/외국인 API 클라이언트
-	/// 현재 4개
+	/// 현재 3개
 	/// </summary>
 	/// <param name="client"></param>
 	public class KiwoomRestApiClientDomesticStockForeignInstitution(KiwoomRestApiClient client) : BaseClient
@@ -41,6 +41,7 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <param name="stockCode"></param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
+		[Obsolete("ka10009 TR은 2026-06-18에 삭제되었습니다. 기관 매매 정보는 MarketCondition.GetStockInstitutionTransactionTrendsAsync(ka10045)를 사용하세요.")]
 		public async Task<KiwoomRestApiResponse<KiwoomForeignInstitutionGetStockInstitutions>> GetStockInstitutionsAsync(string stockCode, CancellationToken cancellationToken = default)
 		{
 			const string apiId = "ka10009";

@@ -69,15 +69,16 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// <param name="id"></param>
 		/// <param name="contYn"></param>
 		/// <param name="nextKey"></param>
+		/// <param name="exchangeType">거래소구분 (KRX 시세 또는 통합시세 기준 검색)</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task GetConditionSearchRequestAsync(int id, string contYn = "", string nextKey = "", CancellationToken cancellationToken = default)
+		public async Task GetConditionSearchRequestAsync(int id, string contYn = "", string nextKey = "", KiwoomWebSocketConditionSearchExchangeType exchangeType = KiwoomWebSocketConditionSearchExchangeType.Krx, CancellationToken cancellationToken = default)
 		{
 			var body = new HttpParameterMap()
 				.AddField("trnm", "CNSRREQ")
 				.AddField("seq", id)
 				.AddField("search_type", "0")
-				.AddField("stex_tp", "K")
+				.AddField("stex_tp", exchangeType)
 				.AddField("cont_yn", contYn)
 				.AddField("next_key", nextKey);
 
@@ -88,15 +89,16 @@ namespace KiwoomRestApi.Net.Clients.DomesticStocks
 		/// | ka10173 | 조건검색 요청 실시간
 		/// </summary>
 		/// <param name="id"></param>
+		/// <param name="exchangeType">거래소구분 (KRX 시세 또는 통합시세 기준 검색, 동시 사용 불가)</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns></returns>
-		public async Task GetConditionSearchRequestRealtimeAsync(int id, CancellationToken cancellationToken = default)
+		public async Task GetConditionSearchRequestRealtimeAsync(int id, KiwoomWebSocketConditionSearchExchangeType exchangeType = KiwoomWebSocketConditionSearchExchangeType.Krx, CancellationToken cancellationToken = default)
 		{
 			var body = new HttpParameterMap()
 				.AddField("trnm", "CNSRREQ")
 				.AddField("seq", id)
 				.AddField("search_type", "1")
-				.AddField("stex_tp", "K");
+				.AddField("stex_tp", exchangeType);
 
 			await _client.SendAsync(body, cancellationToken).ConfigureAwait(false);
 		}

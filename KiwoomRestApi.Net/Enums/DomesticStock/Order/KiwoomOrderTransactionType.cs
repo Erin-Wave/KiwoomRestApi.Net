@@ -1,4 +1,6 @@
-﻿namespace KiwoomRestApi.Net.Enums.DomesticStock.Order
+﻿using System;
+
+namespace KiwoomRestApi.Net.Enums.DomesticStock.Order
 {
 	/// <summary>
 	/// 매매구분
@@ -66,12 +68,25 @@
 		/// </summary>
 		MedianPriceFok = 31,
 		/// <summary>
+		/// 보통(GTP) - NXT 프리마켓 한정
+		/// </summary>
+		NormalGtp = 40,
+		/// <summary>
+		/// 최유리(GTP) - NXT 프리마켓 한정
+		/// </summary>
+		BestGtp = 46,
+		/// <summary>
+		/// 최우선(GTP) - NXT 프리마켓 한정
+		/// </summary>
+		HighestPriorityGtp = 47,
+		/// <summary>
 		/// 장시작전시간외
 		/// </summary>
 		BeforeMarketOpen = 61,
 		/// <summary>
-		/// 시간외단일가 
+		/// 시간외단일가
 		/// </summary>
+		[Obsolete("KRX 시간외단일가 시장 폐지로 2026-09-12부터 사용할 수 없는 주문유형입니다.")]
 		AfterMarketSinglePrice = 62,
 		/// <summary>
 		/// 장마감후시간외 

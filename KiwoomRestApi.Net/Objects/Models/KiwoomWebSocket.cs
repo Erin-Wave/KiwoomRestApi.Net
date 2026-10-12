@@ -295,6 +295,7 @@ namespace KiwoomRestApi.Net.Objects.Models
 		/// <summary>
 		/// 시간외단일가 현재가 (10010)
 		/// </summary>
+		[Obsolete("KRX 시간외단일가 시장 폐지로 2026-09-12부터 제공되지 않는 항목입니다.")]
 		[JsonProperty("10010")]
 		public decimal? AfterMarketSinglePrice;
 		/// <summary>
@@ -1196,121 +1197,145 @@ namespace KiwoomRestApi.Net.Objects.Models
 		/// <summary>
 		/// LP매도호가수량1 (621)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("621")]
 		public decimal? LpSellQuantity1;
 		/// <summary>
 		/// LP매수호가수량1 (631)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("631")]
 		public decimal? LpBuyQuantity1;
 		/// <summary>
 		/// LP매도호가수량2 (622)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("622")]
 		public decimal? LpSellQuantity2;
 		/// <summary>
 		/// LP매수호가수량2 (632)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("632")]
 		public decimal? LpBuyQuantity2;
 		/// <summary>
 		/// LP매도호가수량3 (623)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("623")]
 		public decimal? LpSellQuantity3;
 		/// <summary>
 		/// LP매수호가수량3 (633)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("633")]
 		public decimal? LpBuyQuantity3;
 		/// <summary>
 		/// LP매도호가수량4 (624)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("624")]
 		public decimal? LpSellQuantity4;
 		/// <summary>
 		/// LP매수호가수량4 (634)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("634")]
 		public decimal? LpBuyQuantity4;
 		/// <summary>
 		/// LP매도호가수량5 (625)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("625")]
 		public decimal? LpSellQuantity5;
 		/// <summary>
 		/// LP매수호가수량5 (635)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("635")]
 		public decimal? LpBuyQuantity5;
 		/// <summary>
 		/// LP매도호가수량6 (626)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("626")]
 		public decimal? LpSellQuantity6;
 		/// <summary>
 		/// LP매수호가수량6 (636)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("636")]
 		public decimal? LpBuyQuantity6;
 		/// <summary>
 		/// LP매도호가수량7 (627)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("627")]
 		public decimal? LpSellQuantity7;
 		/// <summary>
 		/// LP매수호가수량7 (637)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("637")]
 		public decimal? LpBuyQuantity7;
 		/// <summary>
 		/// LP매도호가수량8 (628)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("628")]
 		public decimal? LpSellQuantity8;
 		/// <summary>
 		/// LP매수호가수량8 (638)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("638")]
 		public decimal? LpBuyQuantity8;
 		/// <summary>
 		/// LP매도호가수량9 (629)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("629")]
 		public decimal? LpSellQuantity9;
 		/// <summary>
 		/// LP매수호가수량9 (639)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("639")]
 		public decimal? LpBuyQuantity9;
 		/// <summary>
 		/// LP매도호가수량10 (630)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("630")]
 		public decimal? LpSellQuantity10;
 		/// <summary>
 		/// LP매수호가수량10 (640)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("640")]
 		public decimal? LpBuyQuantity10;
 		/// <summary>
 		/// 누적거래량 (13)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("13")]
 		public decimal? AccumulatedVolume;
 		/// <summary>
 		/// 전일거래량대비예상체결율 (299)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("299")]
 		public KiwoomDecimal? ExpectedTradeRateVolumeChange;
 		/// <summary>
 		/// 장운영구분 (215)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("215")]
 		public string? MarketOperationType;
 		/// <summary>
 		/// 투자자별ticker (216)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("216")]
 		public string? InvestorTicker;
 		/// <summary>
@@ -1990,16 +2015,19 @@ namespace KiwoomRestApi.Net.Objects.Models
 		/// <summary>
 		/// ELW기어링비율 (667)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("667")]
 		public decimal? ElwGearingRate;
 		/// <summary>
 		/// ELW손익분기율 (668)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("668")]
 		public decimal? ElwBreakEvenRate;
 		/// <summary>
 		/// ELW자본지지점 (669)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("669")]
 		public decimal? ElwCapitalSupportPoint;
 		/// <summary>
@@ -2330,17 +2358,28 @@ namespace KiwoomRestApi.Net.Objects.Models
 	public record KiwoomWebSocketRealtimeMarketOpenTime
 	{
 		/// <summary>
-		/// 장운영구분 (215)<br/> 
-		/// 0:KRX장전<br/>
-		/// 3:KRX장시작<br/>
-		/// P:NXT프리마켓개시<br/>
-		/// Q:NXT프리마켓종료<br/>
-		/// R:NXT메인마켓개시<br/>
-		/// S:NXT메인마켓 종료<br/>
-		/// T:NXT애프터마켓단일가개시<br/>
-		/// U:NXT애프터마켓개시<br/>
-		/// V:NXT종가매매종료<br/>
-		/// W:NXT애프터마켓종료<br/>
+		/// 장운영구분 (215)<br/>
+		/// 0:장시작전 알림(8:40부터 1분마다 수신)<br/>
+		/// 2:장마감전 알림(15:20부터 1분마다 수신)<br/>
+		/// 3:장시작(09:00)<br/>
+		/// 4:장마감(15:30)<br/>
+		/// 8:정규장마감(거래소 수신시 15:30 이후)<br/>
+		/// 9:전체장마감(거래소 수신시 20:00 이후)<br/>
+		/// a:시간외 종가매매 시작(15:40)<br/>
+		/// b:시간외 종가매매 종료(16:00)<br/>
+		/// g:KRX애프터마켓 시작(16:00)<br/>
+		/// h:KRX애프터마켓 종료(20:00)<br/>
+		/// s:선옵 장마감전 동시호가 시작<br/>
+		/// e:선옵 장마감전 동시호가 종료<br/>
+		/// f:선물옵션 장운영시간 알림(조기개장 상품)<br/>
+		/// o:선옵 장시작<br/>
+		/// P:NXT 프리마켓 시작<br/>
+		/// Q:NXT 프리마켓 종료<br/>
+		/// R:NXT 메인마켓 시작<br/>
+		/// S:NXT 메인마켓 종료<br/>
+		/// T:NXT 애프터마켓 단일가 시작<br/>
+		/// U:NXT 애프터마켓 시작<br/>
+		/// V:NXT 애프터마켓 종료<br/>
 		/// </summary>
 		[JsonProperty("215")]
 		public string? MarketOperationType;
@@ -2469,17 +2508,20 @@ namespace KiwoomRestApi.Net.Objects.Models
 		/// <summary>
 		/// 장시작예상잔여시간 (214)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("214")]
 		[JsonConverter(typeof(KiwoomTimeSpanConverter))]
 		public TimeSpan? MarketOpenRemainingTime;
 		/// <summary>
 		/// 장운영구분 (215)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("215")]
 		public string? MarketOperationType;
 		/// <summary>
 		/// 투자자별ticker (216)
 		/// </summary>
+		[Obsolete("키움 API 명세에서 제거된 항목입니다. 값이 제공되지 않을 수 있습니다.")]
 		[JsonProperty("216")]
 		public string? InvestorTicker;
 	}
@@ -2507,7 +2549,7 @@ namespace KiwoomRestApi.Net.Objects.Models
 		[JsonProperty("14")]
 		public decimal? AccumulatedTransactionAmount;
 		/// <summary>
-		/// VI발동구분 (9068)
+		/// VI발동구분 (9068) - 1: 정적 VI, 2: 동적 VI, 3: 동적+정적 VI, 4: VI연장
 		/// </summary>
 		[JsonProperty("9068")]
 		public string? ViStrikeType;
@@ -2660,6 +2702,11 @@ namespace KiwoomRestApi.Net.Objects.Models
 		/// </summary>
 		[JsonProperty("jmcode")]
 		public string? StockCode;
+		/// <summary>
+		/// 거래소구분 (ND:NASDAQ, NY:NYSE, NA:AMEX) - 미국주식 조건검색에서만 전달
+		/// </summary>
+		[JsonProperty("stexTp")]
+		public string? ExchangeType;
 	}
 
 	public record KiwoomWebSocketConditionSearchRequestRealtime2
@@ -2714,6 +2761,11 @@ namespace KiwoomRestApi.Net.Objects.Models
 		/// </summary>
 		[JsonProperty("907")]
 		public string? OrderSide;
+		/// <summary>
+		/// 거래소 구분 (9081)
+		/// </summary>
+		[JsonProperty("9081")]
+		public string? ExchangeType;
 	}
 
 	public record KiwoomWebSocketConditionSearchClear

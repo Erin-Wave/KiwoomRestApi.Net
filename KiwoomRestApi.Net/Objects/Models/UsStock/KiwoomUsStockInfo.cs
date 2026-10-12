@@ -1,3 +1,4 @@
+using KiwoomRestApi.Net.Enums.DomesticStock.Watchlist;
 using KiwoomRestApi.Net.Objects.Commons;
 
 using Newtonsoft.Json;
@@ -106,6 +107,47 @@ namespace KiwoomRestApi.Net.Objects.Models.UsStock
 		/// </summary>
 		[JsonProperty("isEtf")]
 		public string? IsEtf;
+	}
+	#endregion
+
+	#region usa10103 - 종목메모 조회
+	public record KiwoomUsStockInfoGetStockMemos
+	{
+		/// <summary>
+		/// 처리결과
+		/// </summary>
+		[JsonProperty("rtcd")]
+		private string? RawResult { get; set; }
+		public KiwoomWatchlistResult Result => RawResult switch
+		{
+			"S" => KiwoomWatchlistResult.Success,
+			"F" => KiwoomWatchlistResult.Failure,
+			_ => KiwoomWatchlistResult.Failure
+		};
+		/// <summary>
+		/// 종목메모 리스트
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomUsStockInfoGetStockMemoItem>? Items;
+	}
+
+	public record KiwoomUsStockInfoGetStockMemoItem
+	{
+		/// <summary>
+		/// 거래소구분 (ND:NASDAQ, NY:NYSE, NA:AMEX)
+		/// </summary>
+		[JsonProperty("stex_tp")]
+		public string? ExchangeType;
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 메모내용 - 영웅문G에서 설정한 메모 내용
+		/// </summary>
+		[JsonProperty("memo")]
+		public string? Memo;
 	}
 	#endregion
 

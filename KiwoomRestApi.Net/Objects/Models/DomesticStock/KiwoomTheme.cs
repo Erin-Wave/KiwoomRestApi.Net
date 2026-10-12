@@ -66,6 +66,16 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 	public record KiwoomThemeGetComponentStocks
 	{
 		/// <summary>
+		/// 등락률
+		/// </summary>
+		[JsonProperty("flu_rt")]
+		public KiwoomDecimal? ChangeRate;
+		/// <summary>
+		/// 기간수익률
+		/// </summary>
+		[JsonProperty("dt_prft_rt")]
+		public KiwoomDecimal? PeriodProfitRate;
+		/// <summary>
 		/// 테마구성종목
 		/// </summary>
 		[JsonProperty("thema_comp_stk")]

@@ -1119,6 +1119,21 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 		/// </summary>
 		[JsonProperty("sel_trde_qty")]
 		public KiwoomDecimal? SellVolume;
+		/// <summary>
+		/// 순매수금액 (단위: 천원)
+		/// </summary>
+		[JsonProperty("netprps_amt")]
+		public KiwoomDecimal? NetBuyAmount;
+		/// <summary>
+		/// 매수금액 (단위: 천원)
+		/// </summary>
+		[JsonProperty("buy_amt")]
+		public KiwoomDecimal? BuyAmount;
+		/// <summary>
+		/// 매도금액 (단위: 천원)
+		/// </summary>
+		[JsonProperty("sell_amt")]
+		public KiwoomDecimal? SellAmount;
 	}
 
 	public record KiwoomRankingInfoGetTodayMainBrokers
@@ -1772,5 +1787,285 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 		/// </summary>
 		[JsonProperty("orgn_netprps_qty")]
 		public KiwoomDecimal? InstitutionNetBuyQuantity;
+	}
+
+	/// <summary>
+	/// 사용자 지정 범위 조건 (요청용)
+	/// </summary>
+	public record KiwoomRankingInfoRangeCondition
+	{
+		/// <summary>
+		/// 최소값 (null이면 하한 없음)
+		/// </summary>
+		public decimal? Min;
+		/// <summary>
+		/// 최대값 (null이면 상한 없음)
+		/// </summary>
+		public decimal? Max;
+		/// <summary>
+		/// 최소값 포함 여부 (true: 최소값 이상, false: 최소값 초과)
+		/// </summary>
+		public bool IsMinInclusive = true;
+		/// <summary>
+		/// 최대값 포함 여부 (true: 최대값 이하, false: 최대값 미만)
+		/// </summary>
+		public bool IsMaxInclusive = true;
+	}
+
+	public record KiwoomRankingInfoGetLargeTradeTops
+	{
+		/// <summary>
+		/// 대량체결상위 목록
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomRankingInfoGetLargeTradeTopItem>? Items;
+	}
+	public record KiwoomRankingInfoGetLargeTradeTopItem
+	{
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 종목명
+		/// </summary>
+		[JsonProperty("stk_nm")]
+		public string? StockName;
+		/// <summary>
+		/// 현재가
+		/// </summary>
+		[JsonProperty("cur_prc")]
+		public KiwoomDecimal? CurrentPrice;
+		/// <summary>
+		/// 전일대비기호
+		/// </summary>
+		[JsonProperty("pred_pre_sig")]
+		public string? ChangeSign;
+		/// <summary>
+		/// 전일대비
+		/// </summary>
+		[JsonProperty("pred_pre")]
+		public KiwoomDecimal? Change;
+		/// <summary>
+		/// 등락률
+		/// </summary>
+		[JsonProperty("flu_rt")]
+		public KiwoomDecimal? ChangeRate;
+		/// <summary>
+		/// 거래량
+		/// </summary>
+		[JsonProperty("trde_qty")]
+		public decimal? Volume;
+		/// <summary>
+		/// 매수건수 - 건당 매수체결금액이 건별금액 조건을 초과하는 횟수
+		/// </summary>
+		[JsonProperty("buy_cnt")]
+		public int? BuyCount;
+		/// <summary>
+		/// 매도건수 - 건당 매도체결금액이 건별금액 조건을 초과하는 횟수
+		/// </summary>
+		[JsonProperty("sel_cnt")]
+		public int? SellCount;
+		/// <summary>
+		/// 대비 (매수건수 - 매도건수)
+		/// </summary>
+		[JsonProperty("pre")]
+		public KiwoomInt? CountChange;
+		/// <summary>
+		/// 거래대금 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("trde_prica")]
+		public decimal? TransactionAmount;
+	}
+
+	public record KiwoomRankingInfoGetTradeAmountRangeTransactionRatios
+	{
+		/// <summary>
+		/// 체결금액대별매매비중 목록
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomRankingInfoGetTradeAmountRangeTransactionRatioItem>? Items;
+	}
+	public record KiwoomRankingInfoGetTradeAmountRangeTransactionRatioItem
+	{
+		/// <summary>
+		/// 매도총거래량
+		/// </summary>
+		[JsonProperty("sel_trde_qty")]
+		public decimal? SellVolume;
+		/// <summary>
+		/// 매수총거래량
+		/// </summary>
+		[JsonProperty("buy_trde_qty")]
+		public decimal? BuyVolume;
+		/// <summary>
+		/// 합계총거래량
+		/// </summary>
+		[JsonProperty("tot_trde_qty")]
+		public decimal? TotalVolume;
+		/// <summary>
+		/// 매도건수
+		/// </summary>
+		[JsonProperty("sel_cnt")]
+		public int? SellCount;
+		/// <summary>
+		/// 매수건수
+		/// </summary>
+		[JsonProperty("buy_cnt")]
+		public int? BuyCount;
+		/// <summary>
+		/// 합계순건수 (매수건수 - 매도건수)
+		/// </summary>
+		[JsonProperty("tot_net_cnt")]
+		public KiwoomInt? TotalNetCount;
+		/// <summary>
+		/// 매도비율
+		/// </summary>
+		[JsonProperty("sel_rt")]
+		public KiwoomDecimal? SellRate;
+		/// <summary>
+		/// 매수비율
+		/// </summary>
+		[JsonProperty("buy_rt")]
+		public KiwoomDecimal? BuyRate;
+		/// <summary>
+		/// 합계순비율 (매수비율 - 매도비율)
+		/// </summary>
+		[JsonProperty("tot_net_rt")]
+		public KiwoomDecimal? TotalNetRate;
+		/// <summary>
+		/// 합계평균가격
+		/// </summary>
+		[JsonProperty("tot_avg_pric")]
+		public decimal? TotalAveragePrice;
+		/// <summary>
+		/// 순간체결금액 구간 (3백이하, 5백이하, 1천이하, 3천이하, 5천이하, 1억이하, 5억이하, 5억초과)
+		/// </summary>
+		[JsonProperty("mont_cntr_amt")]
+		public string? InstantTradeAmountRange;
+		/// <summary>
+		/// 매도평균가격
+		/// </summary>
+		[JsonProperty("sel_avg_pric")]
+		public decimal? SellAveragePrice;
+		/// <summary>
+		/// 매수평균가격
+		/// </summary>
+		[JsonProperty("buy_avg_pric")]
+		public decimal? BuyAveragePrice;
+	}
+
+	public record KiwoomRankingInfoGetTopProfitCustomerTransactionDetails
+	{
+		/// <summary>
+		/// 수익률상위고객매매상세 목록
+		/// </summary>
+		[JsonProperty("result_list")]
+		public IEnumerable<KiwoomRankingInfoGetTopProfitCustomerTransactionDetailItem>? Items;
+	}
+	public record KiwoomRankingInfoGetTopProfitCustomerTransactionDetailItem
+	{
+		/// <summary>
+		/// 일자
+		/// </summary>
+		[JsonProperty("dt")]
+		[JsonConverter(typeof(KiwoomDateTimeConverter))]
+		public DateTime? Date;
+		/// <summary>
+		/// 시간
+		/// </summary>
+		[JsonProperty("tm")]
+		public string? Time;
+		/// <summary>
+		/// 순위 - 조회구분 설정에 따른 순위
+		/// </summary>
+		[JsonProperty("rank")]
+		public int? Rank;
+		/// <summary>
+		/// 종목코드
+		/// </summary>
+		[JsonProperty("stk_cd")]
+		public string? StockCode;
+		/// <summary>
+		/// 종목명
+		/// </summary>
+		[JsonProperty("stk_nm")]
+		public string? StockName;
+		/// <summary>
+		/// 현재가
+		/// </summary>
+		[JsonProperty("cur_pric")]
+		public KiwoomDecimal? CurrentPrice;
+		/// <summary>
+		/// 전일대비기호
+		/// </summary>
+		[JsonProperty("pred_pre_sig")]
+		public string? ChangeSign;
+		/// <summary>
+		/// 전일대비
+		/// </summary>
+		[JsonProperty("pred_pre")]
+		public KiwoomDecimal? Change;
+		/// <summary>
+		/// 등락률
+		/// </summary>
+		[JsonProperty("flu_rt")]
+		public KiwoomDecimal? ChangeRate;
+		/// <summary>
+		/// 거래량
+		/// </summary>
+		[JsonProperty("trde_qty")]
+		public decimal? Volume;
+		/// <summary>
+		/// 매수수량
+		/// </summary>
+		[JsonProperty("buy_qty")]
+		public KiwoomDecimal? BuyQuantity;
+		/// <summary>
+		/// 매도수량
+		/// </summary>
+		[JsonProperty("sel_qty")]
+		public KiwoomDecimal? SellQuantity;
+		/// <summary>
+		/// 순매매수량
+		/// </summary>
+		[JsonProperty("netprps_qty")]
+		public KiwoomDecimal? NetTransactionQuantity;
+		/// <summary>
+		/// 매수금액 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("buy_amt")]
+		public KiwoomDecimal? BuyAmount;
+		/// <summary>
+		/// 매도금액 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("sell_amt")]
+		public KiwoomDecimal? SellAmount;
+		/// <summary>
+		/// 순매매금액 (단위: 백만원)
+		/// </summary>
+		[JsonProperty("netprps_amt")]
+		public KiwoomDecimal? NetTransactionAmount;
+		/// <summary>
+		/// 계좌수 (보유 계좌수)
+		/// </summary>
+		[JsonProperty("acct_qty")]
+		public int? AccountCount;
+		/// <summary>
+		/// 수량 (보유 수량)
+		/// </summary>
+		[JsonProperty("qty")]
+		public decimal? HoldingQuantity;
+		/// <summary>
+		/// 평균매입가 (보유 평균 매입가)
+		/// </summary>
+		[JsonProperty("avg_pur_pric")]
+		public decimal? AveragePurchasePrice;
+		/// <summary>
+		/// 수익률 (보유 수익률)
+		/// </summary>
+		[JsonProperty("prft_rt")]
+		public KiwoomDecimal? ProfitRate;
 	}
 }

@@ -258,6 +258,31 @@ namespace KiwoomRestApi.Net.Objects.Models.DomesticStock
 	public record KiwoomEtfGetHourlyTransactions
 	{
 		/// <summary>
+		/// 종목명
+		/// </summary>
+		[JsonProperty("stk_nm")]
+		public string? StockName;
+		/// <summary>
+		/// ETF대상지수명
+		/// </summary>
+		[JsonProperty("etfobjt_idex_nm")]
+		public string? EtfTargetIndexName;
+		/// <summary>
+		/// 원주가격
+		/// </summary>
+		[JsonProperty("wonju_pric")]
+		public decimal? OriginalPrice;
+		/// <summary>
+		/// ETF과세유형
+		/// </summary>
+		[JsonProperty("etftxon_type")]
+		public string? EtfTaxType;
+		/// <summary>
+		/// ETN과세유형
+		/// </summary>
+		[JsonProperty("etntxon_type")]
+		public string? EtnTaxType;
+		/// <summary>
 		/// ETF시간대별추이
 		/// </summary>
 		[JsonProperty("etftisl_trnsn")]
